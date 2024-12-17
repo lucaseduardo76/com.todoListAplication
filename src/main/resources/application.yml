@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: "lucas"
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/tododb
+    username: root
+    password: ""
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+
+
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # ou 'create', 'create-drop' dependendo do seu ambiente de desenvolvimento
+    show-sql: true  # Exibe as consultas SQL no console para depuração
+    properties:
+      hibernate:
+        format_sql: true
+api:
+  security:
+    token:
+      secret: "${JWT_SECRET:my-secret-key}"
