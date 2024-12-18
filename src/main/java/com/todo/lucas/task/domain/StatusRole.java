@@ -1,4 +1,4 @@
-package com.todo.lucas.domain.task;
+package com.todo.lucas.task.domain;
 
 public enum StatusRole {
     NOT_STARTED, STARTED, FINISHED

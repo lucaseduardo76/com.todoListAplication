@@ -1,6 +1,6 @@
-package com.todo.lucas.domain.task;
+package com.todo.lucas.task.domain;
 
-import com.todo.lucas.domain.user.User;
+import com.todo.lucas.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

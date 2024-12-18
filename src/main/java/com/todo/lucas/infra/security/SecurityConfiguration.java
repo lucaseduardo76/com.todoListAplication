@@ -1,7 +1,5 @@
 package com.todo.lucas.infra.security;
 
-import com.todo.lucas.controller.AuthenticationController;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,15 +25,30 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers(HttpMethod.POST, "api/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api.auth.login").permitAll()
-                        .anyRequest().authenticated())
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers(HttpMethod.POST, "api/auth/register").permitAll()
+                                .requestMatchers(HttpMethod.POST, "api/auth/login").permitAll()
+                                .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .httpBasic(httpBasic -> httpBasic.disable())
+                .exceptionHandling(exceptions -> {
+                    exceptions.authenticationEntryPoint((request, response, authException) -> {
+                        response.setContentType("application/json");
+                        response.setStatus(401); // Define o status HTTP como 401 Unauthorized
+                        response.getWriter().write("{\"error\": \"Unauthorized: " + authException.getMessage() + "\"}");
+                    });
+                    exceptions.accessDeniedHandler((request, response, accessDeniedException) -> {
+                        response.setContentType("application/json");
+                        response.setStatus(403); // Define o status HTTP como 403 Forbidden
+                        response.getWriter().write("{\"error\": \"Access Denied: " + accessDeniedException.getMessage() + "\"}");
+                    });
+                })
                 .build();
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager(

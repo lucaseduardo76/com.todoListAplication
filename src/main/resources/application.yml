@@ -15,11 +15,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update  # ou 'create', 'create-drop' dependendo do seu ambiente de desenvolvimento
-    show-sql: true  # Exibe as consultas SQL no console para depuração
+    show-sql: false  # Exibe as consultas SQL no console para depuração
     properties:
       hibernate:
         format_sql: true
 api:
   security:
-    token:
-      secret: "${JWT_SECRET:my-secret-key}"
+    token: "${JWT_SECRET:my-secret-key}"

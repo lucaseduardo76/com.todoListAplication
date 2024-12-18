@@ -1,14 +1,12 @@
-package com.todo.lucas.domain.user;
+package com.todo.lucas.user.domain;
 
-import com.todo.lucas.domain.task.Task;
+import com.todo.lucas.task.domain.Task;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
-import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -53,6 +51,17 @@ public class User implements UserDetails {
     }
 
     public User() {
+    }
+
+    public User(String id, String email,
+                String password, String name,
+                String phone, String cpf) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.phone = phone;
+        this.cpf = cpf;
     }
 
     public User(String id, String email, String password,

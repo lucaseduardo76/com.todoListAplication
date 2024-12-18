@@ -1,4 +1,4 @@
-package com.todo.lucas.domain.user;
+package com.todo.lucas.user.domain;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;

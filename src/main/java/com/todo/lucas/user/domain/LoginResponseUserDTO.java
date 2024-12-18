@@ -1,15 +1,15 @@
-package com.todo.lucas.domain.user;
+package com.todo.lucas.user.domain;
 
 import java.util.Objects;
 
-public class LoginResponseDTO {
+public class LoginResponseUserDTO {
     private String token;
 
-    public LoginResponseDTO(String token) {
+    public LoginResponseUserDTO(String token) {
         this.token = token;
     }
 
-    public LoginResponseDTO() {
+    public LoginResponseUserDTO() {
     }
 
     public String getToken() {
@@ -23,7 +23,7 @@ public class LoginResponseDTO {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        LoginResponseDTO that = (LoginResponseDTO) o;
+        LoginResponseUserDTO that = (LoginResponseUserDTO) o;
         return Objects.equals(token, that.token);
     }
 

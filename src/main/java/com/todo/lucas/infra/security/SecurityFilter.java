@@ -1,7 +1,7 @@
 package com.todo.lucas.infra.security;
 
 
-import com.todo.lucas.repository.UserRepository;
+import com.todo.lucas.user.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,7 +22,9 @@ import java.io.IOException;
 public class SecurityFilter extends OncePerRequestFilter {
 
 
+    @Autowired
     private TokenService tokenService;
+    @Autowired
     private UserRepository userRepository;
 
     @Override
@@ -33,9 +36,10 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
 
         if(token != null) {
+
             var email = tokenService.verifyToken(token);
 
-            UserDetails userDetails = userRepository.findByEmail(email).orElseThrow();
+            UserDetails userDetails = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
 
             var authentication = new UsernamePasswordAuthenticationToken(userDetails,
                     null, userDetails.getAuthorities());

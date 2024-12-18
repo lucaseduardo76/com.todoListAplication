@@ -1,16 +1,16 @@
-package com.todo.lucas.domain.user;
+package com.todo.lucas.user.domain;
 
 
-public class AuthenticationDTO {
+public class AuthenticationUserDTO {
     private String email;
     private String password;
 
-    public AuthenticationDTO(String email, String password) {
+    public AuthenticationUserDTO(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    public AuthenticationDTO() {
+    public AuthenticationUserDTO() {
     }
 
     public String getEmail() {

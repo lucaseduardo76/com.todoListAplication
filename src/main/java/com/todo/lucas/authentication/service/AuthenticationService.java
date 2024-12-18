@@ -1,19 +1,18 @@
-package com.todo.lucas.service;
+package com.todo.lucas.authentication.service;
 
-import com.todo.lucas.domain.user.AuthenticationDTO;
-import com.todo.lucas.domain.user.LoginResponseDTO;
-import com.todo.lucas.domain.user.RegisterDTO;
-import com.todo.lucas.domain.user.User;
+import com.todo.lucas.user.domain.AuthenticationUserDTO;
+import com.todo.lucas.user.domain.LoginResponseUserDTO;
+import com.todo.lucas.user.domain.RegisterDTO;
+import com.todo.lucas.user.domain.User;
+import com.todo.lucas.exception.BadRequestException;
 import com.todo.lucas.infra.security.TokenService;
-import com.todo.lucas.repository.UserRepository;
+import com.todo.lucas.user.repository.UserRepository;
+import com.todo.lucas.user.service.UserServiceApplication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 
 @Service
@@ -26,33 +25,31 @@ public class AuthenticationService {
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserServiceApplication userService;
 
     public AuthenticationService() {
         tokenService = new TokenService();
     }
 
-    public LoginResponseDTO loginAuthentication(AuthenticationDTO data){
+    public LoginResponseUserDTO loginAuthentication(AuthenticationUserDTO data){
 
-        System.out.println("Tentativa de login para: " + data.getEmail());
+
         var emailAndPassword = new UsernamePasswordAuthenticationToken(data.getEmail(), data.getPassword());
 
         try{
             var auth = authenticationManager.authenticate(emailAndPassword);
             var token = tokenService.generateToken((User) auth.getPrincipal());
-            return new LoginResponseDTO(token);
+            return new LoginResponseUserDTO(token);
         }catch (Exception exception){
-            System.out.println("Entrou aqui");
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
+            throw new BadRequestException( "Invalid email or password");
         }
     }
 
     public User registerAuthentication(RegisterDTO registerDTO){
         if(this.userRepository.findByEmail(registerDTO.getEmail()).isPresent()) return null;
 
-        String encryptedPassoword = new BCryptPasswordEncoder().encode(registerDTO.getPassword());
-        User user = new User(registerDTO.getEmail(), encryptedPassoword,
-                registerDTO.getName(), registerDTO.getPhone(),registerDTO.getCpf());
-        return userRepository.save(user);
+        return userService.save(registerDTO);
     }
 
 

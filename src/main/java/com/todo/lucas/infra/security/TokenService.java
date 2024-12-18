@@ -5,8 +5,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.todo.lucas.domain.user.User;
-import org.springframework.beans.factory.annotation.Value;
+import com.todo.lucas.user.domain.User;
+import com.todo.lucas.exception.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -16,16 +16,16 @@ import java.time.ZoneOffset;
 @Service
 public class TokenService {
 
-    @Value("${api.security.token.secret}")
-    private String secret;
+    private final String secret = "my-secret-key";
 
 
     public String generateToken(User user) {
+
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("todo-api")
-                    .withSubject(user.getId())
+                    .withSubject(user.getEmail())
                     .withExpiresAt(generateExpirationTime())
                     .sign(algorithm);
         }catch (JWTCreationException exception){
@@ -33,7 +33,7 @@ public class TokenService {
         }
     }
 
-    public String verifyToken(String token) {
+    public String verifyToken(String token)  {
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
@@ -42,7 +42,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException exception) {
-            throw new JWTVerificationException(exception.getMessage());
+            throw new BadRequestException("Token invalid");
         }
     }
 
