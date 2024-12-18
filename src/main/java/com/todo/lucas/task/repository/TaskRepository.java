@@ -8,8 +8,7 @@ import java.util.Optional;
 
 public interface TaskRepository extends JpaRepository<Task, String> {
     Optional<Task> findByTitle(String title);
-    Optional<List<Task>> findByInitialDate(String date);
-    Optional<List<Task>> findByEndDate(String date);
-    Optional<List<Task>> findByUserId(String userId);
+    Optional<List<Task>> findAllByUserId(String userId);
+
 
 }

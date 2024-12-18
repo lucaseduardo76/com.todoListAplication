@@ -7,7 +7,10 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.todo.lucas.user.domain.User;
 import com.todo.lucas.exception.BadRequestException;
+import com.todo.lucas.user.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -17,6 +20,11 @@ import java.time.ZoneOffset;
 public class TokenService {
 
     private final String secret = "my-secret-key";
+    private final UserRepository userRepository;
+
+    public TokenService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
 
     public String generateToken(User user) {
@@ -34,6 +42,10 @@ public class TokenService {
     }
 
     public String verifyToken(String token)  {
+        return getTokenSubject(token);
+    }
+
+    private String getTokenSubject(String token) {
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
@@ -48,6 +60,11 @@ public class TokenService {
 
     private Instant generateExpirationTime() {
         return LocalDateTime.now().plusHours(3).toInstant(ZoneOffset.of("-03:00"));
+    }
+
+    public User getUserByToken(String token) {
+        String email = getTokenSubject(token);
+        return userRepository.findByEmail(email).orElse(null);
     }
 
 }

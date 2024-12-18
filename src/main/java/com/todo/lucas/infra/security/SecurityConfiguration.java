@@ -31,6 +31,7 @@ public class SecurityConfiguration {
                         authorizeRequests
                                 .requestMatchers(HttpMethod.POST, "api/auth/register").permitAll()
                                 .requestMatchers(HttpMethod.POST, "api/auth/login").permitAll()
+                                .requestMatchers("api/public/v3/api-docs/**", "api/public/swagger-ui/**", "api/public/swagger-ui.html").permitAll()
                                 .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(httpBasic -> httpBasic.disable())

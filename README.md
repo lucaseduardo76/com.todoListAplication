@@ -1,0 +1,3 @@
+A fazer..
+
+- Fazer com queas alterações na task só sejam feitas após a verificação se  o token enviado pertence ao dono da task...
