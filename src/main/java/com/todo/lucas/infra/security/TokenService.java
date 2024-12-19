@@ -19,7 +19,7 @@ import java.time.ZoneOffset;
 @Service
 public class TokenService {
 
-    private final String secret = "my-secret-key";
+    private final String secret = "my-secret-keym";
     private final UserRepository userRepository;
 
     public TokenService(UserRepository userRepository) {

@@ -9,10 +9,10 @@ import java.util.Optional;
 
 public interface TaskServiceInterface {
 
-    Optional<Task> save(RequestedNewTaskDTO requestedTaskDTO);
-    Task findById(String id);
+    Task save(RequestedNewTaskDTO requestedTaskDTO);
+    Task findTaskById(String id);
     Task findByTitle(String title);
-    Optional<Task> update(RequestedUpdateTaskDTO requestedUpdateTaskDTO);
+    Task update(RequestedUpdateTaskDTO requestedUpdateTaskDTO);
     List<Task>findAllByUserId(String id);
     void delete(String id);
 

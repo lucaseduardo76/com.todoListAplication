@@ -19,8 +19,8 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
 
 
-
-    private final TokenService tokenService;
+    @Autowired
+    private TokenService tokenService;
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -28,9 +28,7 @@ public class AuthenticationService {
     @Autowired
     private UserServiceApplication userService;
 
-    public AuthenticationService() {
-        tokenService = new TokenService();
-    }
+
 
     public LoginResponseUserDTO loginAuthentication(AuthenticationUserDTO data){
 

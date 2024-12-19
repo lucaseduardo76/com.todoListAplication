@@ -29,24 +29,10 @@ public class SecurityConfiguration {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers(HttpMethod.POST, "api/auth/register").permitAll()
-                                .requestMatchers(HttpMethod.POST, "api/auth/login").permitAll()
+                                .requestMatchers(HttpMethod.POST, "auth/**").permitAll()
                                 .requestMatchers("api/public/v3/api-docs/**", "api/public/swagger-ui/**", "api/public/swagger-ui.html").permitAll()
-                                .anyRequest().authenticated())
+                                .anyRequest().permitAll())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-                .httpBasic(httpBasic -> httpBasic.disable())
-                .exceptionHandling(exceptions -> {
-                    exceptions.authenticationEntryPoint((request, response, authException) -> {
-                        response.setContentType("application/json");
-                        response.setStatus(401); // Define o status HTTP como 401 Unauthorized
-                        response.getWriter().write("{\"error\": \"Unauthorized: " + authException.getMessage() + "\"}");
-                    });
-                    exceptions.accessDeniedHandler((request, response, accessDeniedException) -> {
-                        response.setContentType("application/json");
-                        response.setStatus(403); // Define o status HTTP como 403 Forbidden
-                        response.getWriter().write("{\"error\": \"Access Denied: " + accessDeniedException.getMessage() + "\"}");
-                    });
-                })
                 .build();
     }
 

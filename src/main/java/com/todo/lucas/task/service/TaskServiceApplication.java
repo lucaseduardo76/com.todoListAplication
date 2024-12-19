@@ -29,13 +29,13 @@ public class TaskServiceApplication implements TaskServiceInterface{
     TokenService tokenService;
 
     @Override
-    public Optional<Task> save(RequestedNewTaskDTO requestedTaskDTO) {
+    public Task save(RequestedNewTaskDTO requestedTaskDTO) {
         Task task = buildNewTaskfromRequestTaskDTO(requestedTaskDTO);
-        return Optional.of(taskRepository.save(task));
+        return taskRepository.save(task);
     }
 
     @Override
-    public Task findById(String id) {
+    public Task findTaskById(String id) {
         return taskRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No task found with id: " + id));
     }
 
@@ -50,7 +50,7 @@ public class TaskServiceApplication implements TaskServiceInterface{
     }
 
     @Override
-    public Optional<Task> update(RequestedUpdateTaskDTO requestedTaskDTO) {
+    public Task update(RequestedUpdateTaskDTO requestedTaskDTO) {
 
         Task previusTask = taskRepository.findById(requestedTaskDTO.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Task not found"));
@@ -58,12 +58,12 @@ public class TaskServiceApplication implements TaskServiceInterface{
         Task updatedTask = buildUpdatedTaskFromRequestTaskDTO(requestedTaskDTO);
         updatedTask.setId(previusTask.getId());
 
-        return Optional.of(updatedTask);
+        return updatedTask;
     }
 
     @Override
     public void delete(String id) {
-        var taskOwner =
+        taskRepository.deleteById(id);
     }
 
     private Task buildUpdatedTaskFromRequestTaskDTO(RequestedUpdateTaskDTO requestedUpdateTaskDTO) {
