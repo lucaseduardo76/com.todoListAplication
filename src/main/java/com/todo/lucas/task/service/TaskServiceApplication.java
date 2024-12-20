@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TaskServiceApplication implements TaskServiceInterface{
@@ -51,13 +50,14 @@ public class TaskServiceApplication implements TaskServiceInterface{
 
     @Override
     public Task update(RequestedUpdateTaskDTO requestedTaskDTO) {
-
+        System.out.println("[INICIO] UPDATE TASK SERVICE");
         Task previusTask = taskRepository.findById(requestedTaskDTO.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Task not found"));
 
-        Task updatedTask = buildUpdatedTaskFromRequestTaskDTO(requestedTaskDTO);
+        Task updatedTask = buildUpdatedTaskFromRequestTaskDTO(requestedTaskDTO, previusTask.getUser());
         updatedTask.setId(previusTask.getId());
-
+        this.saveUpdatedTask(updatedTask);
+        System.out.println("[FIM] UPDATE TASK SERVICE");
         return updatedTask;
     }
 
@@ -66,12 +66,11 @@ public class TaskServiceApplication implements TaskServiceInterface{
         taskRepository.deleteById(id);
     }
 
-    private Task buildUpdatedTaskFromRequestTaskDTO(RequestedUpdateTaskDTO requestedUpdateTaskDTO) {
-        User user = userServiceApplication.findByIdOrElseThrowException(requestedUpdateTaskDTO.getId());
+    private Task buildUpdatedTaskFromRequestTaskDTO(RequestedUpdateTaskDTO requestedUpdateTaskDTO, User user) {
 
          return new Task(requestedUpdateTaskDTO.getId(), requestedUpdateTaskDTO.getTitle(),
                 requestedUpdateTaskDTO.getDescription(), requestedUpdateTaskDTO.getInitialDate(),
-                requestedUpdateTaskDTO.getEndDate(), requestedUpdateTaskDTO.getStatusRole(), user);
+                requestedUpdateTaskDTO.getEndDate(), requestedUpdateTaskDTO.getStatus(), user);
     }
 
     private Task buildNewTaskfromRequestTaskDTO(RequestedNewTaskDTO requestedTaskDTO) {
@@ -81,5 +80,9 @@ public class TaskServiceApplication implements TaskServiceInterface{
                 requestedTaskDTO.getEndDate(), user, StatusRole.NOT_STARTED);
 
         return task;
+    }
+
+    private Task saveUpdatedTask(Task task) {
+        return taskRepository.save(task);
     }
 }

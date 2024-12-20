@@ -10,15 +10,16 @@ public class RequestedUpdateTaskDTO {
     String description;
     LocalDate initialDate;
     LocalDate endDate;
-    StatusRole statusRole;
+    StatusRole status;
 
-    public RequestedUpdateTaskDTO(String id, String title, String description, LocalDate initialDate, LocalDate endDate, StatusRole statusRole) {
+    public RequestedUpdateTaskDTO(String id, String title, String description,
+                                  LocalDate initialDate, LocalDate endDate, StatusRole statusRole) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.initialDate = initialDate;
         this.endDate = endDate;
-        this.statusRole = statusRole;
+        this.status = statusRole;
     }
 
     public RequestedUpdateTaskDTO() {
@@ -64,12 +65,12 @@ public class RequestedUpdateTaskDTO {
         this.endDate = endDate;
     }
 
-    public StatusRole getStatusRole() {
-        return statusRole;
+    public StatusRole getStatus() {
+        return status;
     }
 
-    public void setStatusRole(StatusRole statusRole) {
-        this.statusRole = statusRole;
+    public void setStatus(StatusRole status) {
+        this.status = status;
     }
 
     @Override
@@ -77,11 +78,11 @@ public class RequestedUpdateTaskDTO {
 
         if (o == null || getClass() != o.getClass()) return false;
         RequestedUpdateTaskDTO that = (RequestedUpdateTaskDTO) o;
-        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(description, that.description) && Objects.equals(initialDate, that.initialDate) && Objects.equals(endDate, that.endDate) && statusRole == that.statusRole;
+        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(description, that.description) && Objects.equals(initialDate, that.initialDate) && Objects.equals(endDate, that.endDate) && status == that.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, initialDate, endDate, statusRole);
+        return Objects.hash(id, title, description, initialDate, endDate, status);
     }
 }

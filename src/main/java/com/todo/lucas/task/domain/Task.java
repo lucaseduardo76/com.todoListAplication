@@ -1,5 +1,6 @@
 package com.todo.lucas.task.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.todo.lucas.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     public Task(String title, String description, LocalDate endDate, User user, StatusRole status) {

@@ -1,6 +1,7 @@
 package com.todo.lucas.task.controller.aplicattion;
 
 
+import com.auth0.jwt.JWT;
 import com.todo.lucas.infra.security.TokenService;
 import com.todo.lucas.task.controller.inter.TaskControllerInter;
 import com.todo.lucas.task.domain.RequestedNewTaskDTO;
@@ -33,7 +34,7 @@ public class TaskControllerController implements TaskControllerInter {
     @Override
     public ResponseEntity<List<Task>> getAllTasks(String token, String idUser) {
         System.out.println("[INICIO] getAllTasks");
-        System.out.println(token);
+
        var idUserValidated = validateTokenWithUserId(token, idUser);
        if (idUserValidated == null)
            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -104,9 +105,9 @@ public class TaskControllerController implements TaskControllerInter {
     }
 
     private String validateTokenWithUserId(String token, String idUser) {
-        System.out.println("[INICIO] Validate token with id: " + idUser);
+        System.out.println("[INICIO] Validate token");
         var userByToken = tokenService.getUserByToken(token);
-        System.out.println("[FIM] Validate token with id: " + idUser);
+        System.out.println("[FIM] Validate token");
 
         return userByToken != null && userByToken.getId().equals(idUser) ? userByToken.getId() : null;
 
