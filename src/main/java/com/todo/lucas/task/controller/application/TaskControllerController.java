@@ -1,16 +1,13 @@
-package com.todo.lucas.task.controller.aplicattion;
+package com.todo.lucas.task.controller.application;
 
 
-import com.auth0.jwt.JWT;
 import com.todo.lucas.infra.security.TokenService;
 import com.todo.lucas.task.controller.inter.TaskControllerInter;
 import com.todo.lucas.task.domain.RequestedNewTaskDTO;
 import com.todo.lucas.task.domain.RequestedUpdateTaskDTO;
 import com.todo.lucas.task.domain.Task;
-import com.todo.lucas.task.repository.TaskRepository;
 import com.todo.lucas.task.service.TaskServiceApplication;
 import com.todo.lucas.user.service.UserServiceApplication;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
